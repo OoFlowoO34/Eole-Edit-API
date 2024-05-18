@@ -1,2 +1,2 @@
 # Eole-Edit-API
-Express REST API server to manage a client-server app to upload, compress and view video files.
+REST API developed in Express communicating with the Eole-Edit front-end application, which allows uploading, compressing, and viewing video files.
