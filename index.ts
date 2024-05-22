@@ -18,6 +18,12 @@ app.use((req, res, next) => {
     next();
   });
 
+// Access to app front
+if (process.env.NODE_ENV !== 'development'){
+  // console.log('env', process.env.NODE_ENV )
+  app.use(express.static('./public'))
+}
+
 // Access to a video file
 app.get('/video/:name', (req, res) => {
   const { name } = req.params;
@@ -25,14 +31,8 @@ app.get('/video/:name', (req, res) => {
     return res.status(400).send('name parameter is missing.');
   }
 
-  const videoPath = path.resolve(__dirname, '..', 'uploads', name as string);
-
-  res.sendFile(videoPath, (err) => {
-    if (err) {
-      console.error('Error sending file:', err);
-      res.status(500).send('Error sending file.');
-    }
-  });
+  const videoPath = path.resolve(__dirname, 'uploads', name as string);
+  res.sendFile(videoPath);
 });
 
 const storage = multer.diskStorage({
@@ -93,7 +93,8 @@ app.get('/files/:name', (req, res) => {
   console.log(name, name);
 
   if (name) {
-    const videoFilePath = path.resolve(__dirname,'..', 'uploads', name);
+    const videoFilePath = path.resolve(__dirname, 'uploads', name);
+    // const videoFilePath = path.resolve(__dirname,'..', 'uploads', name);
 
     fs.access(videoFilePath, fs.constants.F_OK, (err) => {
       if (err) {
